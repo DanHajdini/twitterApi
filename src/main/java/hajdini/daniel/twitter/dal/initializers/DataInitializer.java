@@ -1,6 +1,8 @@
 package hajdini.daniel.twitter.dal.initializers;
 
+import hajdini.daniel.twitter.dal.repositories.PostRepository;
 import hajdini.daniel.twitter.dal.repositories.UserRepository;
+import hajdini.daniel.twitter.dl.entities.Post;
 import hajdini.daniel.twitter.dl.entities.User;
 import hajdini.daniel.twitter.dl.enums.UserRole;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import java.util.List;
 public class DataInitializer implements CommandLineRunner {
 
     private final UserRepository userRepository;
+    private final PostRepository postRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -51,9 +54,30 @@ public class DataInitializer implements CommandLineRunner {
                             null,
                             null,
                             null,
-                            UserRole.USER)
+                            UserRole.USER),
+                    new User(
+                            "danj",
+                            "danj@email.com",
+                            password,
+                            "danj OSLM",
+                            "luik",
+                            "chie avant que la vie ne te chie dessus",
+                            null,
+                            UserRole.USER
+                    )
             );
             userRepository.saveAll(users);
+        }
+
+        if (postRepository.count() == 0) {
+
+            List<Post> posts = List.of(
+                    new Post("test1", userRepository.findByUsername("danj")),
+                    new Post("test2", userRepository.findByUsername("danj")),
+                    new Post("test3", userRepository.findByUsername("danj")),
+                    new Post("test4", userRepository.findByUsername("danj"))
+            );
+            postRepository.saveAll(posts);
         }
     }
 }

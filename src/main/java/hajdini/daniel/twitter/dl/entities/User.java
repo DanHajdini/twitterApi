@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity @Table(name = "user_")
-@Getter @Setter
+@Getter
 @AllArgsConstructor
 @EqualsAndHashCode @ToString
 public class User implements UserDetails {
@@ -21,30 +21,38 @@ public class User implements UserDetails {
     @Id
     private String id;
 
+    @Setter
     @Column(nullable = false, unique = true, length = 30)
     private String username;
 
+    @Setter
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Setter
     @Column(nullable = false)
     private String password;
 
+    @Setter
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    @Setter
     @Column(length = 50)
     private String alias;
 
+    @Setter
     @Column(length = 50)
     private String location;
 
+    @Setter
     private String bio;
 
+    @Setter
     private String profileImageUrl;
 
-    @ManyToMany
-    private List<User> followers;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private final List<User> followers;
 
     public User() {
         this.id = UUID.randomUUID().toString();
@@ -70,6 +78,14 @@ public class User implements UserDetails {
         this.bio = bio;
         this.profileImageUrl = profileImageUrl;
         this.role = role;
+    }
+
+    public void addFollower(User user) {
+        this.followers.add(user);
+    }
+
+    public void removeFollower(User user) {
+        this.followers.remove(user);
     }
 
     @Override

@@ -1,9 +1,9 @@
 package hajdini.daniel.twitter.api.controllers.security;
 
-import hajdini.daniel.twitter.api.models.dtos.UserSessionDto;
-import hajdini.daniel.twitter.api.models.dtos.UserTokenDto;
-import hajdini.daniel.twitter.api.models.form.LoginForm;
-import hajdini.daniel.twitter.api.models.form.RegisterForm;
+import hajdini.daniel.twitter.api.models.security.dtos.UserSessionDto;
+import hajdini.daniel.twitter.api.models.security.dtos.UserTokenDto;
+import hajdini.daniel.twitter.api.models.security.form.LoginForm;
+import hajdini.daniel.twitter.api.models.security.form.RegisterForm;
 import hajdini.daniel.twitter.bll.services.security.AuthService;
 import hajdini.daniel.twitter.dl.entities.User;
 import hajdini.daniel.twitter.il.utils.JwtUtil;

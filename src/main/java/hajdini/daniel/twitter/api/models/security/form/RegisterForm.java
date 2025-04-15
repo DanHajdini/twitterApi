@@ -1,4 +1,4 @@
-package hajdini.daniel.twitter.api.models.form;
+package hajdini.daniel.twitter.api.models.security.form;
 
 import hajdini.daniel.twitter.dl.entities.User;
 

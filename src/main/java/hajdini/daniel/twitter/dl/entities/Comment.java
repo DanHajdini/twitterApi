@@ -1,10 +1,7 @@
 package hajdini.daniel.twitter.dl.entities;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -20,16 +17,24 @@ public class Comment {
     @Id
     private String id;
 
+    @Setter
     @Column(nullable = false)
     private String content;
 
     @Column(nullable = false)
     private LocalDateTime commentedAt;
 
-    @ManyToMany
+    @ManyToOne
+    private User author;
+
+    @ManyToOne
+    private Post post;
+
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<User> commentReposts;
 
-    @ManyToMany List<User> commentLikes;
+    @ManyToMany(fetch = FetchType.EAGER)
+    List<User> commentLikes;
 
 
     public Comment() {
@@ -42,5 +47,4 @@ public class Comment {
         this();
         this.content = content;
     }
-
 }

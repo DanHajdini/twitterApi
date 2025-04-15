@@ -1,9 +1,7 @@
 package hajdini.daniel.twitter.dl.entities;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -12,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Getter @Setter
+@Getter
 @AllArgsConstructor
 @EqualsAndHashCode @ToString
 public class Post {
@@ -20,14 +18,19 @@ public class Post {
     @Id
     private String id;
 
+    @Setter
+    @Column(nullable = false)
     private String content;
 
     private LocalDateTime postedAt;
 
-    @ManyToMany
+    @ManyToOne
+    private User author;
+
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<User> postReposts;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<User> postLikes;
 
     public Post() {
@@ -36,9 +39,26 @@ public class Post {
         this.postLikes = new ArrayList<>();
     }
 
-    public Post(String content) {
+    public Post(String content, User author) {
         this();
         this.content = content;
+        this.author = author;
         this.postedAt = LocalDateTime.now();
+    }
+
+    public void addPostLike(User user) {
+        this.postLikes.add(user);
+    }
+
+    public void addPostRepost(User user) {
+        this.postReposts.add(user);
+    }
+
+    public void removePostLike(User user) {
+        this.postLikes.remove(user);
+    }
+
+    public void removePostRepost(User user) {
+        this.postReposts.remove(user);
     }
 }

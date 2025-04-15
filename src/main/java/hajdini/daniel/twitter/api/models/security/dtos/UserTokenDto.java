@@ -1,4 +1,4 @@
-package hajdini.daniel.twitter.api.models.dtos;
+package hajdini.daniel.twitter.api.models.security.dtos;
 
 public record UserTokenDto(
         UserSessionDto user,

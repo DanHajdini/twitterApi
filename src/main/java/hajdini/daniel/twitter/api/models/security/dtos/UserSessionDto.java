@@ -1,4 +1,4 @@
-package hajdini.daniel.twitter.api.models.dtos;
+package hajdini.daniel.twitter.api.models.security.dtos;
 
 import hajdini.daniel.twitter.dl.entities.User;
 import hajdini.daniel.twitter.dl.enums.UserRole;
