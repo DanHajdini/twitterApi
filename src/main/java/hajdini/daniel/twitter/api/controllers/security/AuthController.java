@@ -11,12 +11,14 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class AuthController {
 
     private final AuthService authService;
@@ -43,4 +45,14 @@ public class AuthController {
         return ResponseEntity.ok(userTokenDTO);
     }
 
+
+    @PostMapping("/test")
+    @PreAuthorize("isAnonymous()")
+    public ResponseEntity<UserTokenDto> test() {
+        User user = authService.login("danj", "1234");
+        UserSessionDto userDTO = UserSessionDto.fromUser(user);
+        String token = jwtUtil.generateToken(user);
+        UserTokenDto userTokenDTO = new UserTokenDto(userDTO, token);
+        return ResponseEntity.ok(userTokenDTO);
+    }
 }

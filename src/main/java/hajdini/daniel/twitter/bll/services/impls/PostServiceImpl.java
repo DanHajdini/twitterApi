@@ -45,38 +45,36 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void like(Post post, User user) {
+    public Post like(Post post, User user) {
         User existingUser = userRepository.findById(user.getId()).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
         );
-        post.addPostLike(existingUser);
+        boolean liked = post.getPostLikes().stream().anyMatch(u -> u.getId().equals(existingUser.getId()));
+        if (liked) {
+            post.removePostLike(existingUser);
+        } else {
+            post.addPostLike(existingUser);
+        }
+
         postRepository.save(post);
+        return post;
     }
 
     @Override
-    public void unlike(Post post, User user) {
+    public Post repost(Post post, User user) {
         User existingUser = userRepository.findById(user.getId()).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
         );
-        post.removePostLike(existingUser);
+        boolean reposted = post.getPostReposts().stream().anyMatch(u -> u.getId().equals(existingUser.getId()));
+        if (reposted) {
+            post.removePostRepost(existingUser);
+        } else {
+            post.addPostRepost(existingUser);
+        }
         postRepository.save(post);
+        return post;
     }
 
-    @Override
-    public void repost(Post post, User user) {
-        User existingUser = userRepository.findById(user.getId()).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
-        );
-        post.addPostRepost(existingUser);
-        postRepository.save(post);
-    }
 
-    @Override
-    public void undoRepost(Post post, User user) {
-        User existingUser = userRepository.findById(user.getId()).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
-        );
-        post.removePostRepost(existingUser);
-        postRepository.save(post);
-    }
+
 }

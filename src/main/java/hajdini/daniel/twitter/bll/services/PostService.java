@@ -12,9 +12,6 @@ public interface PostService {
     Post findOnePost(String id);
     void createPost(Post post);
     void deletePost(Post post);
-    void like(Post post, User user);
-    void unlike(Post post, User user);
-    void repost(Post post, User user);
-    void undoRepost(Post post, User user);
-
+    Post like(Post post, User user);
+    Post repost(Post post, User user);
 }

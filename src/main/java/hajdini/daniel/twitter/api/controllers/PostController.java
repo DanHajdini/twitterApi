@@ -20,6 +20,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/posts")
+@CrossOrigin(origins = "http://localhost:4200")
 public class PostController {
 
     private final PostService postService;
@@ -69,48 +70,35 @@ public class PostController {
 
     @PutMapping("/{id}/like")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Void> likePost(
+    public ResponseEntity<PostDto> likePost(
             @PathVariable String id,
             @AuthenticationPrincipal User user
     ) {
         Post post = postService.findOnePost(id);
-        postService.like(post, user);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PutMapping("/{id}/unlike")
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Void> unlikePost(
-            @PathVariable String id,
-            @AuthenticationPrincipal User user
-    ) {
-        System.out.println(user);
-        Post post = postService.findOnePost(id);
-        postService.unlike(post, user);
-        return ResponseEntity.noContent().build();
+        PostDto updatedPost = PostDto.fromPost(postService.like(post, user));
+        return ResponseEntity.ok(updatedPost);
     }
 
     @PutMapping("/{id}/repost")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Void> repostPost(
+    public ResponseEntity<PostDto> repostPost(
             @PathVariable String id,
             @AuthenticationPrincipal User user
     ) {
-        System.out.println(user);
         Post post = postService.findOnePost(id);
-        postService.repost(post, user);
-        return ResponseEntity.noContent().build();
+        PostDto updatedPost = PostDto.fromPost(postService.repost(post, user));
+        return ResponseEntity.ok(updatedPost);
     }
 
-    @PutMapping("/{id}/unrepost")
+    @PostMapping("/{id}/quote")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Void> undoRepostPost(
+    public ResponseEntity<Void> quotePost(
             @PathVariable String id,
+            @RequestBody PostForm form,
             @AuthenticationPrincipal User user
     ) {
-        System.out.println(user);
         Post post = postService.findOnePost(id);
-        postService.undoRepost(post, user);
+        postService.createPost(form.toPostWithQuote(user, post));
         return ResponseEntity.noContent().build();
     }
 }

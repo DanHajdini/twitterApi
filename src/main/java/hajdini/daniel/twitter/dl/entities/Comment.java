@@ -30,21 +30,50 @@ public class Comment {
     @ManyToOne
     private Post post;
 
+    @ManyToOne
+    private Comment parent;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private List<User> commentReposts;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    List<User> commentLikes;
+    private List<User> commentLikes;
 
 
     public Comment() {
         this.id = UUID.randomUUID().toString();
         this.commentReposts = new ArrayList<>();
         this.commentLikes = new ArrayList<>();
+        this.commentedAt = LocalDateTime.now();
     }
 
-    public Comment(String content) {
+    public Comment(String content, User author, Post post) {
         this();
         this.content = content;
+        this.author = author;
+        this.post = post;
+    }
+
+    public Comment(String content,User author, Comment parent) {
+        this();
+        this.content = content;
+        this.author = author;
+        this.parent = parent;
+    }
+
+    public void addCommentLike(User u) {
+        this.commentLikes.add(u);
+    }
+
+    public void addCommentRepost(User u) {
+        this.commentReposts.add(u);
+    }
+
+    public void removeCommentLike(User u) {
+        this.commentLikes.remove(u);
+    }
+
+    public void removeCommentRepost(User u) {
+        this.commentReposts.remove(u);
     }
 }

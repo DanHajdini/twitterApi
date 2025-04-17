@@ -9,4 +9,8 @@ public record PostForm(
     public Post toPost(User user) {
         return new Post(content, user);
     }
+
+    public Post toPostWithQuote(User user, Post post) {
+        return new Post(content, user, post);
+    }
 }

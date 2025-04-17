@@ -27,6 +27,9 @@ public class Post {
     @ManyToOne
     private User author;
 
+    @ManyToOne
+    private Post quotedPost;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private List<User> postReposts;
 
@@ -37,13 +40,20 @@ public class Post {
         this.id = UUID.randomUUID().toString();
         this.postReposts = new ArrayList<>();
         this.postLikes = new ArrayList<>();
+        this.postedAt = LocalDateTime.now();
     }
 
     public Post(String content, User author) {
         this();
         this.content = content;
         this.author = author;
-        this.postedAt = LocalDateTime.now();
+    }
+
+    public Post(String content, User author, Post quotedPost) {
+        this();
+        this.content = content;
+        this.author = author;
+        this.quotedPost = quotedPost;
     }
 
     public void addPostLike(User user) {
